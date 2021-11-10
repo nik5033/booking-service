@@ -1,44 +1,31 @@
 class BookingsController < ApplicationController
-  before_action :set_booking, only: %i[ show edit update destroy ]
-
+  skip_before_action :verify_authenticity_token
   # GET /bookings/1 or /bookings/1.json
   def show
+    render json: { result: Booking.exists?(params[:id]) }
   end
 
   # POST /bookings or /bookings.json
   def create
     @booking = Booking.new(booking_params)
-
-    respond_to do |format|
+      #not done
       if @booking.save
-        format.html { redirect_to @booking, notice: "Booking was successfully created." }
-        format.json { render :show, status: :created, location: @booking }
+        format.json { render json: { booking_id: @booking.id }, status: :created}
       else
-        format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @booking.errors, status: :unprocessable_entity }
       end
-    end
   end
 
   # PATCH/PUT /bookings/1 or /bookings/1.json
   def update
-    respond_to do |format|
-      if @booking.update(booking_params)
-        format.html { redirect_to @booking, notice: "Booking was successfully updated." }
-        format.json { render :show, status: :ok, location: @booking }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @booking.errors, status: :unprocessable_entity }
-      end
+    if Booking.find(params[:id]).update(status: 0)
+      render json: {result: 'Ok'}
+    else
+      render json: @booking.errors, status: :unprocessable_entity
     end
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_booking
-      @booking = Booking.find(params[:id])
-    end
-
     # Only allow a list of trusted parameters through.
     def booking_params
       params.fetch(:booking, {})
