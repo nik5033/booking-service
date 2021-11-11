@@ -7,11 +7,13 @@ class BookingsController < ApplicationController
 
   # POST /bookings
   def create
+    #Price not done
+
     @booking = Booking.new(event_date: booking_params[:event_date].to_date,
                            status: 1,
                            ticket_category: booking_params[:ticket_category]
     )
-    
+
     if @booking.save
       render json: { booking_id: @booking.id }, status: :created
     else
