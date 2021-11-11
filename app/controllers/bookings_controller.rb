@@ -7,13 +7,16 @@ class BookingsController < ApplicationController
 
   # POST /bookings
   def create
-    @booking = Booking.new(booking_params)
-      #not done
-      if @booking.save
-        format.json { render json: { booking_id: @booking.id }, status: :created}
-      else
-        format.json { render json: @booking.errors, status: :unprocessable_entity }
-      end
+    @booking = Booking.new(event_date: booking_params[:event_date].to_date,
+                           status: 1,
+                           ticket_category: booking_params[:ticket_category]
+    )
+    
+    if @booking.save
+      render json: { booking_id: @booking.id }, status: :created
+    else
+      render json: @booking.errors, status: :unprocessable_entity
+    end
   end
 
   # PATCH/PUT /bookings/1 or /bookings/1.json
