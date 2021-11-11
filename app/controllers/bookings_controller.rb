@@ -1,11 +1,11 @@
 class BookingsController < ApplicationController
   skip_before_action :verify_authenticity_token
   # GET /bookings/1 or /bookings/1.json
-  def show
-    render json: { result: Booking.exists?(params[:id]) }
+  def show 
+    render json: { result: BookingService.new(params).valid? }
   end
 
-  # POST /bookings or /bookings.json
+  # POST /bookings
   def create
     @booking = Booking.new(booking_params)
       #not done
