@@ -18,6 +18,7 @@ class BookingsController < ApplicationController
 
   # PATCH/PUT /bookings/1 or /bookings/1.json
   def update
+    return render json: {resuls: "Booking invalid"}, status: :not_found unless BookingService.new(params).valid?
     if Booking.find(params[:id]).update(status: 0)
       render json: {result: 'Ok'}
     else
